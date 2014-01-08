@@ -1,0 +1,69 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides: selenium-grid-node
+# Required-Start: $local_fs $remote_fs
+# Required-Stop:
+# X-Start-Before:
+# Default-Start: 2 3 4 5
+# Default-Stop:
+### END INIT INFO
+LOG=/var/log/selenium/selenium-grid-node.log
+NODECONFIG=/etc/selenium-grid-node.json
+XVFBARGS="-screen 0 1280x1024x24"
+USER="selenium-grid-user"
+GRIDCOMMAND="java -jar /usr/lib/selenium/selenium-server-standalone.jar -role node -nodeConfig $NODECONFIG"
+XVFBCOMMAND="xvfb-run -s \"$XVFBARGS\" $GRIDCOMMAND"
+
+case "${1:-''}" in
+        'start')
+                
+                if test -f /tmp/selenium-grid-node.pid
+                then
+                        echo "Selenium grid node is already running."
+                else
+
+                        echo "Starting Selenium grid node..."
+                        
+                        su $USER -c "$XVFBCOMMAND" > /var/log/selenium/selenium-grid-node.log 2>&1 & echo $! > /tmp/selenium-grid-node.pid
+                        error=$?
+                        if test $error -gt 0
+                        then
+                                echo "${bon}Error $error! Couldn't start Selenium grid node!${boff}"
+                        fi
+                fi
+        ;;
+        'stop')
+                if test -f /tmp/selenium-grid-node.pid
+                then
+                        echo "Stopping Selenium grid node..."
+                        PID=`cat /tmp/selenium-grid-node.pid`
+                        kill -3 $PID
+                        if kill -9 $PID ;
+                                then
+                                        sleep 2
+                                        test -f /tmp/selenium-grid-node.pid && rm -f /tmp/selenium-grid-node.pid
+                                else
+                                        echo "Selenium could not be stopped..."
+                                fi
+                else
+                        echo "Selenium grid node is not running."
+                fi
+                ;;
+        'restart')
+                if test -f /tmp/selenium-grid-node.pid
+                then
+                        kill -HUP `cat /tmp/selenium-grid-node.pid`
+                        test -f /tmp/selenium-grid-node.pid && rm -f /tmp/selenium-grid-node.pid
+                        sleep 1
+                        su $USER -c "$XVFBCOMMAND" > /var/log/selenium/selenium-grid-node.log 2>&1 & echo $! > /tmp/selenium-grid-node.pid
+                        echo "Reload Selenium grid node..."
+                else
+                        echo "Selenium grid node isn't running..."
+                fi
+                ;;
+        *)      # no parameter specified
+                echo "Usage: $SELF start|stop|restart|reload|force-reload|status"
+                exit 1
+        ;;
+esac

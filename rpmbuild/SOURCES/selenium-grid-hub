@@ -1,0 +1,62 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides: selenium-grid-hub
+# Required-Start: $local_fs $remote_fs
+# Required-Stop:
+# X-Start-Before:
+# Default-Start: 2 3 4 5
+# Default-Stop:
+### END INIT INFO
+
+HUBCONFIG=/etc/selenium-grid-hub.json
+case "${1:-''}" in
+        'start')
+                if test -f /tmp/selenium-grid-hub.pid
+                then
+                        echo "Selenium grid hub is already running."
+                else
+                        java -jar /usr/lib/selenium/selenium-server-standalone.jar -role hub -hubConfig $HUBCONFIG > /var/log/selenium/selenium-grid-hub.log 2>&1 & echo $! > /tmp/selenium-grid-hub.pid
+                        echo "Starting Selenium grid hub..."
+
+                        error=$?
+                        if test $error -gt 0
+                        then
+                                echo "${bon}Error $error! Couldn't start Selenium grid hub!${boff}"
+                        fi
+                fi
+        ;;
+        'stop')
+                if test -f /tmp/selenium-grid-hub.pid
+                then
+                        echo "Stopping Selenium grid hub..."
+                        PID=`cat /tmp/selenium-grid-hub.pid`
+                        kill -3 $PID
+                        if kill -9 $PID ;
+                                then
+                                        sleep 2
+                                        test -f /tmp/selenium-grid-hub.pid && rm -f /tmp/selenium-grid-hub.pid
+                                else
+                                        echo "Selenium could not be stopped..."
+                                fi
+                else
+                        echo "Selenium grid hub is not running."
+                fi
+                ;;
+        'restart')
+                if test -f /tmp/selenium-grid-hub.pid
+                then
+                        kill -HUP `cat /tmp/selenium-grid-hub.pid`
+                        test -f /tmp/selenium-grid-hub.pid && rm -f /tmp/selenium-grid-hub.pid
+                        sleep 1
+                        java -jar /usr/lib/selenium/selenium-server-standalone.jar -role hub -hubConfig $HUBCONFIG > /var/log/selenium/selenium-grid-hub.log 2>&1 & echo $! > /tmp/selenium-grid-hub.pid
+                        echo "Reload Selenium grid hub..."
+                else
+                        echo "Selenium grid hub isn't running..."
+                fi
+                ;;
+        *)      # no parameter specified
+                echo "Usage: $SELF start|stop|restart|reload|force-reload|status"
+                exit 1
+        ;;
+esac
