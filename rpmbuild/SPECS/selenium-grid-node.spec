@@ -1,7 +1,7 @@
 # and we don't need multilib anyway: 
 %define __jar_repack %{nil}
 Name:	selenium-grid-node	
-Version:	2.38.0
+Version:	2.40.0
 Release:	1%{?dist}
 Summary:	Selenium Grid node
 
@@ -13,7 +13,7 @@ BuildArch: noarch
 Source0:selenium-grid-node.json
 Source1:selenium-grid-node
 #BuildRequires:	
-Requires: xorg-x11-server-Xvfb
+Requires: xorg-x11-server-Xvfb selenium-server-standalone
 %description
 Selenium grid node based on selenium-server-standalone.  The node is the central point that will receive all the test request and distribute them the the right nodes. 
 
