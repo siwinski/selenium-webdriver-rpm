@@ -2,23 +2,21 @@
   "capabilities":
       [
         {
-          "browserName": "*firefox",
-          "maxInstances": 5,
-          "seleniumProtocol": "Selenium"
-        },
-        {
           "browserName": "firefox",
-          "maxInstances": 5,
-          "seleniumProtocol": "WebDriver"
+          "maxInstances": 4,
+          "platform": "LINUX"
         }
       ],
   "configuration":
   {
     "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
-    "maxSession": 5,
+    "maxSession": 4,
     "register": true,
-    "registerCycle": 5000,
-    "hubPort": 4444,
-    "hubHost": "localhost"
+    "registerCycle": 10000,
+    "cleanUpCycle":15000,
+    "nodeTimeout":45,
+    "browserTimeout":45,
+    "hubHost": "localhost",
+    "hubPort": 4444
   }
 }
