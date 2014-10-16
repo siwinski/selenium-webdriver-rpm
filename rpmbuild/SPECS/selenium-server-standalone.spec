@@ -1,6 +1,6 @@
 
 Name:	selenium-server-standalone	
-Version:	2.42.2
+Version:	2.43.1
 Release:	1%{?dist}
 Summary:	Selenium Webdriver Server
 Group:		Applications/System
@@ -8,7 +8,7 @@ BuildArch: noarch
 License:	Apache 2.0
 URL:		http://seleniumhq.org/
 Packager:       David Henry
-Source0:http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-%{version}.jar
+Source0:http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-%{version}.jar
 #BuildRequires:	
 Requires: java >= 1:1.6.0
 %description
