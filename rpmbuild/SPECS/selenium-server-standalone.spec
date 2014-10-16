@@ -33,9 +33,7 @@ pwd
 echo '*installing*'
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/lib/selenium/
-cp %_sourcedir/selenium-server-standalone-%{version}.jar selenium-server-standalone/selenium-server-standalone-%{version}.jar
-pwd
-cp selenium-server-standalone/selenium-server-standalone-%{version}.jar $RPM_BUILD_ROOT/usr/lib/selenium/
+cp %_sourcedir/selenium-server-standalone-%{version}.jar $RPM_BUILD_ROOT/usr/lib/selenium/
 ln -s /usr/lib/selenium/selenium-server-standalone-%{version}.jar $RPM_BUILD_ROOT/usr/lib/selenium/selenium-server-standalone.jar
 
 %post 
