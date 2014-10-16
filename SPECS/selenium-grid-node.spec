@@ -1,7 +1,7 @@
 # and we don't need multilib anyway: 
 %define __jar_repack %{nil}
 Name:	selenium-grid-node	
-Version:	2.40.0
+Version:	2.43.1
 Release:	1%{?dist}
 Summary:	Selenium Grid node
 
