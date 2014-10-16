@@ -1,7 +1,7 @@
 # and we don't need multilib anyway: 
 %define __jar_repack %{nil}
 Name:	selenium-grid-hub	
-Version:	2.40.0
+Version:	2.42.2
 Release:	1%{?dist}
 Summary:	Selenium Grid Hub
 
