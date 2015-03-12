@@ -4,7 +4,7 @@ selenium-webdriver-rpm
 
 # What is this spec?
 
-This spec is a first attempt for packaging selenium standalone server (see http://seleniumhq.org/), and some init.d scripts I hacked together for running a selenium grid (see https://code.google.com/p/selenium/wiki/Grid2) as RPMS  for install on RHEL, Fedora, and other RPM based Linux systems. 
+This spec is a first attempt for packaging selenium standalone server (see http://seleniumhq.org/), and some init.d scripts I hacked together for running a selenium grid (see https://code.google.com/p/selenium/wiki/Grid2) as RPMS  for install on RHEL, Fedora, and other RPM based Linux systems.
 
 My goal is to eventually submit this to EPEL and become a package maintainer.  I have a long way to go ;)
 
@@ -14,17 +14,8 @@ DISCLAIMER: I MAKE NO CLAIM THAT I KNOW WHAT I AM DOING.  USE AT YOUR OWN RISK! 
 
 #### Fedora/RHEL/CentOS
 
-
-(these instructions are NOT correct, will update soon)
-    yum install -y rpm-build rpmdevtools readline-devel ncurses-devel gdbm-devel tcl-devel openssl-devel db4-devel byacc libyaml-devel libffi-devel make
-   rpmdev-setuptree
-    cd ~/rpmbuild/SOURCES
-    wget http://selenium.googlecode.com/files/selenium-server-standalone-2.39.0.jar
-    cd ~/rpmbuild/SPECS
-    https://raw.github.com/djhenry/selenium-webdriver-rpm/master/SPECS/selenium-server-standalone.spec
-    rpmbuild -bb selenium-server-standalone.spec
-
-
+    make install-deps # only once, it uses sudo to install the build requirements
+    make
 
 ### What do these 3 .rpm files provide?
 + selenium-server-standalone rpm packaged version of selenium-server-standalone jar from http://seleniumhq.org/download/
