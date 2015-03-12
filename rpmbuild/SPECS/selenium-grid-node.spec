@@ -1,7 +1,7 @@
 # and we don't need multilib anyway: 
 %define __jar_repack %{nil}
 Name:	selenium-grid-node	
-Version:	2.43.1
+Version:	2.45.0
 Release:	1%{?dist}
 Summary:	Selenium Grid node
 
@@ -20,13 +20,8 @@ Selenium grid node based on selenium-server-standalone.  The node is the central
 %prep
 echo '*preping*'
 
-
-
-
 %build
 echo '*building*'
-
-
 
 %install
 echo '*installing*'
@@ -52,7 +47,6 @@ chkconfig --del selenium-grid-node
 service selenium-grid-node stop
 
 %postun
-
 
 %files
 
