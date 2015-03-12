@@ -55,8 +55,26 @@ case "${1:-''}" in
                         echo "Selenium grid hub isn't running..."
                 fi
                 ;;
+        'status')
+                if test -f /tmp/selenium-grid-hub.pid
+                then
+                        PID=`cat /tmp/selenium-grid-hub.pid`
+                        if ps | grep -q $PID
+                        then
+                                echo "Selenium is running, with pid $PID"
+                                exit 0
+                        else
+                                echo "Selenium is not running, process $PID is dead, deleting stale pid file"
+                                rm -f /tmp/selenium-grid-hub.pid
+                                exit 1
+                        fi
+                else
+                        echo "Selenium pid file is missing"
+                        exit 1
+                fi
+                ;;
         *)      # no parameter specified
-                echo "Usage: $SELF start|stop|restart|reload|force-reload|status"
+                echo "Usage: $SELF start|stop|restart|status"
                 exit 1
         ;;
 esac
