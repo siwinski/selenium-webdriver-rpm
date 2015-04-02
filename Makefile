@@ -1,18 +1,30 @@
-SELENIUM_MAJOR_VERSION=2.45
-SELENIUM_BUILD=0
+# vim: tabstop=4:softtabstop=4:shiftwidth=4:noexpandtab
 
-all: prepare-build build
+default: rpms
 
-install-deps:
-	sudo yum install -y rpm-build rpmdevtools readline-devel ncurses-devel gdbm-devel tcl-devel openssl-devel db4-devel byacc libyaml-devel libffi-devel make
+# TARGET: help     Print this information
+.PHONY: help
+help:
+	# Usage:
+	#   make <target>
+	#
+	# Targets:
+	@egrep "^# TARGET:" [Mm]akefile | sed 's/^# TARGET:\s*/#   /'
 
-prepare-build:
-	rpmdev-setuptree
-	wget -c http://selenium-release.storage.googleapis.com/${SELENIUM_MAJOR_VERSION}/selenium-server-standalone-${SELENIUM_MAJOR_VERSION}.${SELENIUM_BUILD}.jar
-	mv selenium-server-standalone-${SELENIUM_MAJOR_VERSION}.${SELENIUM_BUILD}.jar ~/rpmbuild/SOURCES/
-	rsync -av rpmbuild/ ~/rpmbuild/
+# TARGET: setup    Sets up environment
+.PHONY: setup
+setup:
+	@which rpmbuild >& /dev/null || sudo yum install -y rpm-build
+	@(which rpmdev-setuptree && which spectool) >& /dev/null || sudo yum install -y rpmdevtools
+	@rpmdev-setuptree
 
-build:
-	rpmbuild -bb rpmbuild/SPECS/selenium-grid-hub.spec
-	rpmbuild -bb rpmbuild/SPECS/selenium-grid-node.spec
-	rpmbuild -bb rpmbuild/SPECS/selenium-server-standalone.spec
+# TARGET: sources  Downloads remote source and copies local sources into build root
+.PHONY: sources
+sources: setup
+	@spectool -g -R ./selenium.spec
+	@cp -pr ./sources/* ~/rpmbuild/SOURCES/
+
+# TARGET: rpms     Builds RPMs (DEFAULT TARGET)
+.PHONY: rpms
+rpms: setup sources
+	@rpmbuild -ba ./selenium.spec
